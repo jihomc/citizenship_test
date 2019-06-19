@@ -5,7 +5,7 @@ COMPLETE - Script to scrape website for 100 Q&A's and create database
 COMPLETE - Script to scrape testupdates website to update questions 28, 29, 39, 40, 46, 47 in database
 -- Continuous updates
 
-Script to update geo table with all locations and answers for questions 20, 43, and 44
+COMPLETE Script to update geo table with all locations and answers for questions 20, 43, and 44
 -- Question_id 20 Senators (D.C. (or the territory where the applicant lives) has no U.S. Senators.)
 -- Senators - https://www.senate.gov/general/contact_information/senators_cfm.xml
 
@@ -27,8 +27,10 @@ Then question_id 44 to get capitals
 question_id 20 senators only states
 
 
+NEXT ----
 
 Script to update zip table with all zip codes and representatives
 -- https://www.house.gov/representatives/find-your-representative
 -- Question 23 - Who is your representative?
 
+-- LEARN SELENIUM?? Scrapy? 
