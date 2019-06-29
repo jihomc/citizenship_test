@@ -215,29 +215,29 @@ geo().then(geolist => {
         console.log('connected as id ' + connection.threadId);
     })
 
-    // // INSERT caplist INTO questions table
-    // var insert_caplist = "INSERT INTO geo (location, question_id, answer) VALUES ?";
+    // INSERT caplist INTO geo table
+    var insert_caplist = "INSERT INTO geo (location, question_id, answer) VALUES ?";
     
-    // connection.query(insert_caplist, [geolist[0]], function(err) {
-    //     if (err) throw err;
-    //     console.log('caplist inserted into geo table.');
-    // })
+    connection.query(insert_caplist, [geolist[0]], function(err) {
+        if (err) throw err;
+        console.log('caplist inserted into geo table.');
+    })
 
-    // // INSERT govlist INTO geo table
-    // var insert_govlist = "INSERT INTO geo (location, question_id, answer) VALUES ?";
+    // INSERT govlist INTO geo table
+    var insert_govlist = "INSERT INTO geo (location, question_id, answer) VALUES ?";
     
-    // connection.query(insert_govlist, [geolist[1]], function(err) {
-    //     if (err) throw err;
-    //     console.log('govlist inserted into geo table.');
-    // })
+    connection.query(insert_govlist, [geolist[1]], function(err) {
+        if (err) throw err;
+        console.log('govlist inserted into geo table.');
+    })
 
-    // // INSERT senlist INTO geo table
-    // var insert_senlist = "INSERT INTO geo (location, question_id, answer) VALUES ?";
+    // INSERT senlist INTO geo table
+    var insert_senlist = "INSERT INTO geo (location, question_id, answer) VALUES ?";
     
-    // connection.query(insert_senlist, [geolist[2]], function(err) {
-    //     if (err) throw err;
-    //     console.log('senlist inserted into geo table.');
-    // })
+    connection.query(insert_senlist, [geolist[2]], function(err) {
+        if (err) throw err;
+        console.log('senlist inserted into geo table.');
+    })
 
     // Test query on geo table
     connection.query('SELECT location, question_id, answer FROM geo', function(err, rows, fields) {

@@ -5,7 +5,7 @@ const cheerio = require('cheerio');
 
 // url https://www.uscis.gov/citizenship/testupdates
 // http://127.0.0.1:5500/testupdates.html
-request('http://127.0.0.1:5500/get_testupdates.html', (error,
+request('http://127.0.0.1:5500/database/get_testupdates.html', (error,
 response, html) => {
     if (!error && response.statusCode == 200) {
 

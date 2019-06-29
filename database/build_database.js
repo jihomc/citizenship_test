@@ -13,7 +13,7 @@ const go = async () => {
     
     const options = {
         // uri: "https://www.uscis.gov/citizenship/educators/educational-products/100-civics-questions-and-answers-mp3-audio-english-version",
-        uri: "http://127.0.0.1:5500/build_database.html",
+        uri: "http://127.0.0.1:5500/database/build_database.html",
         transform: function (body) {
             return cheerio.load(body);
         }
@@ -95,7 +95,7 @@ go().then(qa_list => {
 
     connection.query(create_users, function(err, result) {
         if (err) throw err;
-        console.log('Table created. Result: ' + result);
+        console.log('Created table: users ' + result);
     })
 
     // CREATE TABLE questions
@@ -118,16 +118,30 @@ go().then(qa_list => {
         console.log('Created table: geo ' + result);
     })
 
-    // CREATE TABLE zip
-    var create_zip = "CREATE TABLE zip (zip_code INT PRIMARY KEY, representative VARCHAR(50), \
-                            location VARCHAR(50), question_id INT, \
-                            FOREIGN KEY(location) REFERENCES geo(location), \
-                            FOREIGN KEY(question_id) REFERENCES geo(question_id))";
 
-    connection.query(create_zip, function(err, result) {
+    // CREATE TABLE reps
+    var create_reps = "CREATE TABLE reps (location VARCHAR(50), district INT, \
+                            representative VARCHAR(50), question_id INT, \
+                            PRIMARY KEY(location, district), \
+                            FOREIGN KEY(question_id) REFERENCES questions(question_id))";
+                            // FOREIGN KEY(location) REFERENCES geo(location), \
+
+    connection.query(create_reps, function(err, result) {
+    if (err) throw err;
+    console.log('Created table: reps ' + result);
+    })
+
+    // CREATE TABLE zips
+    var create_zips = "CREATE TABLE zips (location VARCHAR(50), zip_code INT, \
+                            districts VARCHAR(100), \
+                            PRIMARY KEY(location, zip_code))";
+                            // FOREIGN KEY(location, question_id) REFERENCES geo(location, question_id), \
+                            // FOREIGN KEY(question_id) REFERENCES geo(question_id))";
+
+    connection.query(create_zips, function(err, result) {
         if (err) throw err;
-        console.log('Created table: zip ' + result);
-    })            
+        console.log('Created table: zips ' + result);
+    })
 
 
     // INSERT qa_list INTO questions table

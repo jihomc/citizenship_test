@@ -1,6 +1,5 @@
 // module.exports = {
 //     "AL": "Alabama",
-//       01: "Alabama",
 //     "AK": "Alaska",
 //     "AS": "American Samoa",
 //     "AZ": "Arizona",
