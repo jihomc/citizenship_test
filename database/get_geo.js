@@ -6,34 +6,81 @@
 const request = require('request-promise');
 const cheerio = require('cheerio');
 const fs = require('fs');
-// const fs = require('fs').promises;
 
 // JSON object for states, territories and abbreviations
 // const locations = require('./locations.js');
 
-let govlist = [];
-let senlist = [];
-let caplist = [];
-let locations = {};
-
-// fs promise?
-// await fs.readFile('./governors.html', 'utf8', function(err, data) {
-//     if (err) throw err;
-//     const $governors = cheerio.load(data);
-// });
 
 // async load saved html files to Cheerio for parsing
 // create govlist, senlist, caplist to populate geo table
 
-const geo = async() => {
+const get_geo = async() => {
     
+    let govlist = [];
+    let senlist = [];
+    let caplist = [];
+    let locations = {};
+
+    const get_senators = {
+        uri: 'https://www.senate.gov/general/contact_information/senators_cfm.xml',
+        transform: function(body) {
+            return cheerio.load(body);
+        }
+    };
+    
+    const get_capitals = {
+        // uri: 'https://simple.wikipedia.org/wiki/List_of_U.S._state_capitals',
+        uri: 'https://en.wikipedia.org/wiki/Template:US_state_capitals',
+        transform: function(body) {
+            return cheerio.load(body);
+        }
+    };
+    
+    const get_governors = {
+        uri: 'https://www.nga.org/governors',
+        transform: function(body) {
+            return cheerio.load(body);
+        }
+    };
+
     try {
+
+        // if capitals.html does not exist, create new file
+        if (!(fs.existsSync('./capitals.html'))) {
+
+            const $capitals = await request(get_capitals);
+            const $senators = await request(get_senators);
+            const $governors = await request(get_governors);
+
+            fs.writeFile("./capitals.html", $capitals.html(), function(err) {
+                if (err) {
+                    return console.log(err);
+                }
+                console.log('The file capitals.html was saved!');
+            })
+
+            fs.writeFile("./senators.html", $senators.html(), function(err) {
+                if (err) {
+                    return console.log(err);
+                }
+                console.log('The file senators.html was saved!');
+            })
+
+            fs.writeFile("./governors.html", $governors.html(), function(err) {
+                if (err) {
+                    return console.log(err);
+                }
+                console.log('The file governors.html was saved!');
+            })
+
+        };
+
         // load saved html files into Cheerio for parsing
-        const $governors = cheerio.load(fs.readFileSync('./governors.html'));
-        const $senators = cheerio.load(fs.readFileSync('./senators.html'), {
+        const $governors = await cheerio.load(fs.readFileSync('./governors.html'));
+        const $senators = await cheerio.load(fs.readFileSync('./senators.html'), {
                 xmlMode: true
             });
-        const $capitals = cheerio.load(fs.readFileSync('./capitals.html'));
+        const $capitals = await cheerio.load(fs.readFileSync('./capitals.html'));
             
         // iterate over capitals.html  
         
@@ -147,28 +194,6 @@ const geo = async() => {
             };
         };
 
-        // // loop over locations and senlist to get missing territories
-        // for (values in locations) {
-        //     let count;
-        //     for (index in senlist) {
-        //         if (locations[values][0] === senlist[index][0]) {
-        //             // console.log(locations[values][0]);
-        //             count = 1;
-        //         };
-        //     };
-        //     // if count is not 1, territory is matched
-        //     if (!(count === 1)) {
-        //         // console.log(values);
-        //         // insert answers for territories into senlist list
-        //         if (values === "DC") {
-        //             senlist.push([locations[values][0], '20', JSON.stringify(["D.C. has no U.S. Senators"])]);
-        //         } else {
-        //             senlist.push([locations[values][0], '20', JSON.stringify([locations[values][0] + " has no U.S. Senators"])]);
-        //         };
-        //     } else {
-        //         count = 0;
-        //     };
-        // };
         
         // simpler version of loop over locations and senlist to get missing territories
         for (values in locations) {
@@ -195,7 +220,7 @@ const geo = async() => {
     }
 };
 
-geo().then(geolist => {
+get_geo().then(geolist => {
 
     // connect to mysql database "citizen"
     var mysql = require('mysql');

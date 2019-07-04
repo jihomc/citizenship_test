@@ -188,12 +188,12 @@ build_reps().then(results => {
     })
 
     // INSERT replist INTO reps table
-    // var insert_replist = "INSERT INTO reps (location, district, representative, question_id) VALUES ?";
+    var insert_replist = "INSERT INTO reps (location, district, representative, question_id) VALUES ?";
     
-    // connection.query(insert_replist, [results[0]], function(err) {
-    //     if (err) throw err;
-    //     console.log('replist inserted into reps table.');
-    // })
+    connection.query(insert_replist, [results[0]], function(err) {
+        if (err) throw err;
+        console.log('replist inserted into reps table.');
+    })
 
     // INSERT ziplist INTO zips table
     var insert_ziplist = "INSERT INTO zips (location, zip_code, districts) VALUES ?";
