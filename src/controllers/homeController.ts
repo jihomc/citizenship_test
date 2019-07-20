@@ -11,10 +11,10 @@ class HomeController {
             // const conn = await connect();
             await connection.query("SELECT DISTINCT LOCATION FROM geo", (err, rows) => {
                 if (err) { throw err; }
-                const answerlist = JSON.parse(JSON.stringify(rows));
+                const locationlist = JSON.parse(JSON.stringify(rows));
                 // tslint:disable-next-line: no-console
                 // console.log(answerlist);
-                res.render("index", { locationVals: answerlist });
+                res.render("index", { locationVals: locationlist, zipVal: " 94108 " });
             });
         } catch (err) {
             throw (err);
@@ -25,22 +25,29 @@ class HomeController {
         try {
             const location = req.body.selectLocation;
             let zip = 0;
+            // If zip selected, validate against db.
             if (req.body.selectZip) {
                 zip = req.body.selectZip;
                 const checkZip = "SELECT EXISTS (SELECT 1 FROM zips WHERE location = (?) AND zip_code = (?))";
                 await connection.query(checkZip, [location, zip], (err, results) => {
                     if (err) { throw err; }
                     const validation = Object.values(results[0]);
-                    if (validation[0] === 1) {
-                        // Zip matched, query database for questions & answers using location and zip code
-                        // Render flashcards
-                    } else {
+                    if (!(validation[0] === 1)) {
                         // Validation error for zip, re-render page with error message
-                        res.render("index", { validationError: "invalid zipcode"} );
+                        connection.query("SELECT DISTINCT LOCATION FROM geo", (error, rows) => {
+                            if (error) { throw err; }
+                            const locationlist = JSON.parse(JSON.stringify(rows));
+                            // tslint:disable-next-line: max-line-length
+                            res.render("index", { locationVals: locationlist, userLocation: location, zipVal: zip, validationError: "invalid zipcode"} );
+                        });
+                    } else {
+                        // Zip matched, query database for questions & answers using location and zip code
+                        //
                     }
                 });
             } else {
-                const hi = "hee";
+                // No zip needed, location only
+                // query here
             }
         } catch (err) {
         throw (err);

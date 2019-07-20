@@ -21,8 +21,9 @@ header p {
 h1 {
     color: #3c3b6e;
 }
-#selectContainer {
-
+#locationContainer {
+    display: none;
+    margin: 25px auto;
 }
 
 #selectLabel, #selectZipLabel{
@@ -34,7 +35,7 @@ h1 {
     display: none;
 }
 
-#startContainer {
+#navButtons {
     margin: 25px auto;
 }
 #startButton {

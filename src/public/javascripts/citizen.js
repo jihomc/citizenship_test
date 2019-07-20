@@ -1,8 +1,8 @@
 var selector = document.getElementById("selectLocation");
 var zipContainer = document.getElementById("zipContainer");
 var selectZip = document.getElementById("selectZip");
-//var selectZipLabel = document.getElementById("selectZipLabel");
-//var startContainer = document.getElementById("startContainer");
+var selectZipLabel = document.getElementById("selectZipLabel");
+var locationContainer = document.getElementById("locationContainer");
 var selectLocationLabel = document.getElementById("selectLabel");
 var currentLocation = "";
 var currentZip = "";
@@ -26,15 +26,23 @@ selector.addEventListener("change", function() {
         selectLabel.innerHTML = "Your Location is: ";
         //currentLocation = selector.options[selector.selectedIndex].text;
         if (!(selector.value === "American Samoa" || selector.value === "District of Columbia" || selector.value === "Guam" || selector.value === "Northern Mariana Islands" || selector.value === "Puerto Rico" || selector.value === "Virgin Islands")) {
+            selectZipLabel.disabled = false;
             zipContainer.style.display = "block";
             selectZip.focus();
         } else {
             zipContainer.style.display = "none";
             selectZip.value = ""; // Sets zip code to "" if entered before selecting a non-voting territory.
+            selectZipLabel.disabled = true;
         }
-        startButton.style.display = "inline-block";
+        locationContainer.style.display = "block";
+        // locationButton.style.display = "inline-block";
     }
 });
+
+if (!(selector.value === "Select location")) {
+    zipContainer.style.display = "block";
+    locationContainer.style.display = "block";
+}
 
 
 var keys = [];

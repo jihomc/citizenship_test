@@ -18,20 +18,29 @@
                 <label for="selectLocation" id="selectLabel">Choose your location: </label>
                 <select name="selectLocation" id="selectLocation">
                     <option>Select location</option>
+                <% if (locals.userLocation) { %>
+                    <option selected value='<%= userLocation %>'><%= userLocation %></option>
+                <% } %>
                 <% for(var i=0; i < locationVals.length; i++) { %>
-                    <option value='<%= locationVals[i]["LOCATION"] %>'><%= locationVals[i]['LOCATION'] %></option>
+                    <option value="<%= locationVals[i]['LOCATION'] %>"><%= locationVals[i]['LOCATION'] %></option>
                 <% } %>
                 </select>
         </div>
         <div id="zipContainer">
-            <label for="selectZip" id="selectZipLabel">Enter zip code: </label>
-            <input name="selectZip" id="selectZip" type="text" placeholder="Enter your zipcode">
+            <label for="selectZip" id="selectZipLabel">Enter 5 digit zip code: </label>
+            <input name="selectZip" id="selectZip" type="text" placeholder="<%= zipVal %>" size="5" required>
+            <% if (locals.validationError) { %>
+                <p class="error"><%= validationError %></p>
+            <% } %>
         </div>
-        <div id="startContainer">
-            <button id="startButton" class="button">Start</button>
-            <button id="resetButton" class="button">Reset</button>
+        <div id="locationContainer">
+            <button id="locationButton" class="button">Set location</button>
         </div>
     </form>
+    <div id="navButtons">
+        <button id="startButton" class="button">Start</button>
+        <button id="resetButton" class="button">Reset</button>    
+    </div>
     <div id="container">
         <div>
             <p id="question">Question: How many States are there?</p>
