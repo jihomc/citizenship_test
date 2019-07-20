@@ -7,6 +7,6 @@ const router = Router();
 router.get( "/", homeController.home );
 
 // define POST route handler for home page location dropdown menu
-// router.post( "/", homeController.setLocation );
+router.post( "/", homeController.setLocation );
 
 export default router;
