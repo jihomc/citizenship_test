@@ -1,5 +1,6 @@
 // import { createPool, Pool } from "mysql";
 import mysql from "mysql";
+import util from "util";
 
 // export async function connect(): Promise<Pool> {
 //     const connection = await createPool({
@@ -20,5 +21,7 @@ const connection = mysql.createConnection({
 });
 
 connection.connect();
+
+connection.query = util.promisify(connection.query);
 
 export default connection;

@@ -22,8 +22,19 @@ h1 {
     color: #3c3b6e;
 }
 #locationContainer {
-    display: none;
+    /* display: none; */
     margin: 25px auto;
+}
+#locationButton {
+    display: none;
+}
+
+#startButton {
+    display: none;
+}
+
+#resetButton {
+    display: none;
 }
 
 #selectLabel, #selectZipLabel{
@@ -37,6 +48,7 @@ h1 {
 
 #navButtons {
     margin: 25px auto;
+    display: none;
 }
 #startButton {
     border-style: 1px;
