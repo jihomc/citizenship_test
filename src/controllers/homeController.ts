@@ -1,25 +1,21 @@
 import { Request, Response } from "express";
-import connection from "../database";
+import mysql2 from "mysql2/promise";
+import pool from "../database";
+// import connection from "../database";
 import DataModel from "../models/dbModel";
 
+let locationlist: any;
 let location: string = "";
 let zip: number;
+let qalist: any;
 
 class HomeController {
     public static home = async (req: Request, res: Response): Promise<Response | void> => {
         try {
-            // const conn = await connect();
-            const locations = await DataModel.locationMenu;
-            locations().then( (locationlist) => {
-                // tslint:disable-next-line: no-console
-                console.log(locationlist);
-                res.render("index", { locationVals: locationlist, zipVal: " 20001 " });
-            });
-            // await connection.query("SELECT DISTINCT LOCATION FROM geo", (err, rows) => {
-            //     if (err) { throw err; }
-            //     const locationlist = JSON.parse(JSON.stringify(rows));
-            //     // console.log(answerlist);
-            // });
+            locationlist = await DataModel.locationMenu();
+            // tslint:disable-next-line: no-console
+            // console.log(locationlist);
+            res.render("index", { locationVals: locationlist, zipVal: " 20001 " });
         } catch (err) {
             throw (err);
             }
@@ -28,40 +24,59 @@ class HomeController {
     public static setLocation = async (req: Request, res: Response): Promise<Request | void> => {
         try {
             location = req.body.selectLocation;
+            // console.log("locationlist: " + locationlist);
             // If zip selected, validate against db.
             if (req.body.selectZip) {
                 zip = req.body.selectZip;
-                const checkZip = "SELECT EXISTS (SELECT 1 FROM zips WHERE location = (?) AND zip_code = (?))";
-                await connection.query(checkZip, [location, zip], (err, results) => {
-                    if (err) { throw err; }
-                    const validation = Object.values(results[0]);
-                    if (!(validation[0] === 1)) {
-                        // Validation error for zip, re-render page with error message
-                        connection.query("SELECT DISTINCT LOCATION FROM geo", (error, rows) => {
-                            if (error) { throw err; }
-                            const locationlist = JSON.parse(JSON.stringify(rows));
-                            // tslint:disable-next-line: max-line-length
-                            res.render("index", { locationVals: locationlist, userLocation: location, zipVal: zip, validationError: "invalid zipcode"} );
-                        });
-                    } else {
-                        // Zip matched, query database for questions & answers using location and zip code
-                        res.redirect("/start");
-                    }
-                });
+                const validation = await DataModel.checkZip(location, zip);
+                // tslint:disable-next-line: no-console
+                console.log("validation: " + validation);
+                if (!(validation === 1)) {
+                    // Validation error for zip, re-render page with error message
+                    // tslint:disable-next-line: max-line-length
+                    res.render("index", { locationVals: locationlist, userLocation: location, zipVal: zip, validationError: "invalid zipcode"} );
+                } else {
+                    // Zip matched, redirect to start function
+                    res.redirect("/start");
+                }
             // Zip is null, no validation needed. Query db with location.
             } else {
                 // tslint:disable-next-line: no-console
-                console.log(location);
-                res.redirect("/start");
+                // console.log(location);
+                // res.render("start", { userLocation: location, zipVal: zip });
+                // res.session.valid = location
             }
         } catch (err) {
-        throw (err);
+            throw (err);
         }
     }
-
-    public static start = async (req: Request, res: Response, loc: any): Promise<Request | void> => {
+    public static start = async (req: Request, res: Response): Promise<Request | void> => {
         try {
-            res.render("index");
+            // Zip matched, query database for questions & answers using location and zip code
+            const startZip = await DataModel.startZip(location, zip);
+            // parse results with JSON and format data into an array of objects
+            qalist = JSON.parse(JSON.stringify(startZip));
+            // tslint:disable-next-line: max-line-length
+            qalist = qalist[0].sort((a: { question_id: number; }, b: { question_id: number; }) => (a.question_id > b.question_id ? 1 : -1));
+            // tslint:disable-next-line: no-console
+            console.log("started, index: 0");
+            // tslint:disable-next-line: max-line-length
+            res.render("start", { userLocation: location, zipVal: zip, question: qalist[0].question, answer: JSON.parse(qalist[0].answer), q_index: qalist[0].question_id });
+        } catch (err) {
+            throw (err);
+        }
+    }
+    public static next = async (req: Request, res: Response): Promise<Request | void> => {
+        try {
+            if (req.body.q_index) {
+                const QID = Number(req.body.q_index);
+                // tslint:disable-next-line: no-console
+                console.log("next, index: " + QID + " type: " + typeof QID);
+                // tslint:disable-next-line: max-line-length
+                res.render("start", { userLocation: location, zipVal: zip, question: qalist[QID].question, answer: JSON.parse(qalist[QID].answer), q_index: qalist[QID].question_id });
+            }
+            // tslint:disable-next-line: max-line-length
+            // res.render("start", { userLocation: location, zipVal: zip, question: qalist[0].question, answer: JSON.parse(qalist[0].answer), q_id: qalist[0].question_id });
         } catch (err) {
             throw (err);
         }

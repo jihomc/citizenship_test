@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import express from "express";
-import mysql from "mysql";
+// import mysql from "mysql";
 import path from "path";
 import connection from "./database";
 // import * as routes from "./routes";

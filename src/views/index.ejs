@@ -35,6 +35,9 @@
         </div>
         <div id="locationContainer">
             <button id="locationButton" class="button">Set location</button>
+            <!-- <% if (locals.userLocation) { %>
+                <option selected value='<%= userLocation %>'><%= userLocation %></option>
+            <% } %> -->
             <!-- <button id="startButton" class="button">Start</button>
             <button id="resetButton" class="button">Reset</button>     -->
         </div>
@@ -44,41 +47,13 @@
             <p id="question">Question: How many States are there?</p>
         </div>
         <div id="answer">
-            <!-- <p>Answer: This is the answer.</p> -->
             <ul id="answerList">
-                <li id="sampleAnswer">Answer: There are 50 states.</li>
+                <li class="answerLi">Answer: There are 50 states.</li>
             </ul>
-        </div>
-        <div id="button-area">
-            <button id="showAnswerButton" class="button" value="show">Hide Answer</button>
-            <button id="nextQuestionButton" class="button">Next Question</button>
         </div>
     </div>
 
-
-
-    <!-- <script src="../public/scripts/citizen.js">
-    </script> -->
     <script type="text/javascript" src="public/javascripts/citizen.js"></script>
 
 </body>
 </html>
-
-
-<!-- <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Guitar Inventory</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-</head>
-<body>
-    <div class="container">
-        <h1 class="header">Guitar Inventory</h1>
-        <a class="btn" href="/guitars"><i class="material-icons right">arrow_forward</i>Get started!</a>
-    </div>
-</body>
-</html> -->

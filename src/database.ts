@@ -1,27 +1,42 @@
 // import { createPool, Pool } from "mysql";
-import mysql from "mysql";
-import util from "util";
+// import mysql from "mysql";
+// import mysql2 from "mysql2";
+import mysql2 from "mysql2/promise";
 
-// export async function connect(): Promise<Pool> {
-//     const connection = await createPool({
+// export async function connection(): Promise<Pool> {
+//     const connect = await mysql2.createPool({
 //         connectionLimit: 10,
 //         database: process.env.DATABASE || "citizen",
 //         host: process.env.HOST || "localhost",
 //         password: process.env.PASSWORD || "bar",
 //         user: process.env.USER || "foo"
 //     });
-//     return connection;
-// }
+//     return connect;
 
-const connection = mysql.createConnection({
+// const connection = mysql2.createConnection({
+//     database: process.env.DATABASE || "citizen",
+//     host: process.env.HOST || "localhost",
+//     password: process.env.PASSWORD || "bar",
+//     user: process.env.USER || "foo"
+// });
+
+// connection.connect();
+
+const pool = mysql2.createPool({
+    connectionLimit: 10,
     database: process.env.DATABASE || "citizen",
     host: process.env.HOST || "localhost",
+    multipleStatements: true,
     password: process.env.PASSWORD || "bar",
-    user: process.env.USER || "foo"
+    user: process.env.USER || "foo",
 });
 
-connection.connect();
+// const getConnection = () => pool.getConnection();
+// export { getConnection };
 
-connection.query = util.promisify(connection.query);
+// pool.on("connection", (connection) => {
+//     connection.query("SET SESSION auto_increment_increment=1");
+//   });
 
-export default connection;
+// export default connection;
+export default pool;

@@ -82,10 +82,13 @@ h1 {
     line-height: 1.7em;
     font-size: 1.2em;
 }
+/* unordered list */
 #answerList {
     padding: 0;
+    display: none;
 }
-#answerList li {
+/* list items */
+.answerLi {
     list-style: none;
     font-size: 1.15em;
     margin: 15px auto;
@@ -97,11 +100,18 @@ h1 {
 }
 
 #showAnswerButton {
-    display: none;
+    display: inline-block;
 }
 #showAnswerButton:focus {
     border: 1px dotted #3c3b6e;
 }
+#nextform {
+    display: inline-block;
+}
 #nextQuestionButton {
+    display: inline-block;
+}
+
+#q_index {
     display: none;
 }
