@@ -36,12 +36,24 @@
         </div>
         <div id="button-area">
             <button id="showAnswerButton" value="hidden">Show Answer</button>
-            <form id="nextform" action="/start" method="POST">
-                <input name="q_index" id="q_index" type="number" value="<%= q_index %>" />
-                <button id="nextQuestionButton" class="button">Next Question</button>
-                <!-- <input id="nextQuestionButton" type="submit" value="Next Question"/> -->
-            </form>
+            <% if (q_index >= 0 && q_index <= 98) { %>
+                <form id="nextform" action="/start" method="POST">
+                    <input name="q_index" id="q_index" type="number" value="<%= q_index %>" />
+                    <input name="shown" id="shown" type="text" value="no"/>
+                    <button id="nextQuestionButton" class="button">Next Question</button>
+                </form>
+            <% } %>
+            <% if (q_index === 99) { %>
+                <form id="finishform" action="/finished" method="GET">
+                    <button id="finishedButton" class="button">Finished</button>
+                </form>
+            <% } %>
         </div>
+    </div>
+    <div id="finished">
+            <form id="finishform" action="/finish" method="GET">
+                <button id="finishedButton" class="button">Finished</button>
+            </form>
     </div>
 
     <script type="text/javascript" src="public/javascripts/start.js"></script>

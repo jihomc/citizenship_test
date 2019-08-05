@@ -31,11 +31,16 @@ selector.addEventListener("change", function() {
     } else {
         selectLabel.innerHTML = "Your Location is: ";
         //currentLocation = selector.options[selector.selectedIndex].text;
-        if (!(selector.value === "American Samoa" || selector.value === "District Of Columbia" || selector.value === "Guam" || selector.value === "Northern Mariana Islands" || selector.value === "Puerto Rico" || selector.value === "Virgin Islands")) {
-            selectZip.disabled = false;
-            zipContainer.style.display = "block";
-            locationButton.innerHTML = "Set location";
-            selectZip.focus();
+        if (!(selector.value === "American Samoa" || selector.value === "District Of Columbia" ||
+              selector.value === "Guam" || selector.value === "Northern Mariana Islands" ||
+              selector.value === "Puerto Rico" || selector.value === "Virgin Islands" ||
+              selector.value === "Alaska" || selector.value === "Delaware" || selector.value === "Montana" ||
+              selector.value === "North Dakota" || selector.value === "South Dakota" ||
+              selector.value === "Vermont" || selector.value === "Wyoming")) {
+                    selectZip.disabled = false;
+                    zipContainer.style.display = "block";
+                    locationButton.innerHTML = "Set location";
+                    selectZip.focus();
         } else {
             // Territory selected
             selectZip.disabled = true;

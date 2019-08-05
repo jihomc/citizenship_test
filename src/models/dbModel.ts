@@ -33,14 +33,81 @@ class DataModel {
             questions where not exists (select question_id from geo where geo.question_id = questions.question_id) \
             AND NOT EXISTS (select question_id from reps where reps.question_id = questions.question_id) \
             UNION SELECT questions.question_id, questions.question, geo.answer FROM questions \
-            JOIN geo on questions.question_id = geo.question_id where geo.location = 'California' \
+            JOIN geo on questions.question_id = geo.question_id where geo.location = (?) \
             UNION SELECT questions.question_id, questions.question, \
             CONCAT('[', GROUP_CONCAT(CONCAT('\"', reps.representative, '\"') SEPARATOR ', '), ']') \
             as answer FROM questions JOIN reps on questions.question_id = reps.question_id where district in \
             (select * from JSON_TABLE(@districts, '$[*]' COLUMNS(value int path '$'))data) and location = (?)";
-            const getQA = mysql2.format(queryQA, [location]);
+            const getQA = mysql2.format(queryQA, [location, location]);
 
-            // const conn = await pool.getConnection();
+            pool.getConnection()
+            .then((conn) => {
+                const res = conn.query(setVariable);
+                // tslint:disable-next-line: no-console
+                // console.log("setVariable: " + res);
+                return conn;
+                }).then((conn) => {
+                    const QA = conn.query(getQA);
+                    // tslint:disable-next-line: no-console
+                    // console.log("QA query: " + QA);
+                    const results = QA;
+                    conn.release();
+                    resolve(QA);
+                }).catch((err) => {
+                    reject(err);
+            });
+        });
+    }
+
+    public static startTerritory = (location: any) => {
+        return new Promise((resolve, reject) => {
+            // final query for territories
+            // tslint:disable-next-line: no-console
+            console.log("in dbmodel territory: ");
+            // tslint:disable-next-line: max-line-length
+            const query = "select questions.question_id, questions.question, questions.answer \
+            FROM questions where not exists \
+            (select question_id from geo where geo.question_id = questions.question_id) \
+            AND NOT EXISTS (select question_id from reps where reps.question_id = questions.question_id) \
+            UNION SELECT questions.question_id, questions.question, geo.answer FROM questions \
+            JOIN geo on questions.question_id = geo.question_id where geo.location = (?) \
+            UNION SELECT questions.question_id, questions.question, \
+            CONCAT('[', CONCAT('\"', reps.representative, '\"'), ', \"',\
+            (?), ' has no (voting) Representatives in Congress\"', ']') \
+            AS answer FROM questions JOIN reps ON questions.question_id = reps.question_id \
+            WHERE district = 0 AND location = (?)";
+            const territoryQuery = mysql2.format(query, [location, location, location]);
+            pool.execute(territoryQuery, (err: any, results: any) => {
+                if (err) { reject(err); }
+                const QA = results;
+                resolve(QA);
+            });
+        });
+    }
+    public static startDAL = (location: any) => {
+        return new Promise((resolve, reject) => {
+            // Final query for states with one congressional district - District at Large (DAL)
+            // tslint:disable-next-line: max-line-length
+            const query = "select questions.question_id, questions.question, questions.answer \
+            FROM questions where not exists \
+            (select question_id from geo where geo.question_id = questions.question_id) \
+            AND NOT EXISTS (select question_id from reps where reps.question_id = questions.question_id) \
+            UNION SELECT questions.question_id, questions.question, geo.answer FROM questions \
+            JOIN geo on questions.question_id = geo.question_id where geo.location = (?) \
+            UNION SELECT questions.question_id, questions.question, \
+            CONCAT('[', CONCAT('\"', reps.representative, '\"'), ']') \
+            AS answer FROM questions JOIN reps ON questions.question_id = reps.question_id \
+            WHERE district = 0 AND location = (?)";
+            const DALQuery = mysql2.format(query, [location, location]);
+            pool.execute(DALQuery, (err: any, results: any) => {
+                if (err) { reject(err); }
+                const QA = results;
+                resolve(QA);
+            });
+        });
+    }
+
+                // const conn = await pool.getConnection();
             // try {
             // await conn.query(setVariable, (err: any, results: any) => {
             //     if (err) { throw err; }
@@ -68,24 +135,6 @@ class DataModel {
             //         conn.release();
             //     }
             // }
-            pool.getConnection()
-            .then((conn) => {
-                const res = conn.query(setVariable);
-                // tslint:disable-next-line: no-console
-                // console.log("setVariable: " + res);
-                return conn;
-                }).then((conn) => {
-                    const QA = conn.query(getQA);
-                    // tslint:disable-next-line: no-console
-                    // console.log("QA query: " + QA);
-                    const results = QA;
-                    conn.release();
-                    resolve(QA);
-                }).catch((err) => {
-                    reject(err);
-            });
-        });
-    }
                 // return new Promise((resolved, rejected) => {
                     //     async function multiquery() {
             //         const conn = await getConnection();

@@ -23,4 +23,8 @@ router.post( "/start", (req, res, next) => {
     homeController.next(req, res);
 });
 
+// define GET route handler for finished
+router.get( "/finish", (req, res, next) => {
+    homeController.finish(req, res);
+});
 export default router;

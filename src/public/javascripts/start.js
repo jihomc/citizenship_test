@@ -1,20 +1,21 @@
-// const nextQuestionButton = document.querySelector("#nextQuestionButton");
 const nextQuestionButton = document.getElementById("nextQuestionButton");
 const showAnswerButton = document.getElementById("showAnswerButton");
-// const answerList = document.getElementById("answerList");
+const shown = document.getElementById("shown");
 
 document.addEventListener('DOMContentLoaded', function() {
     showAnswerButton.focus();
 });
 
 function showhide() {
-    // 
+    // User clicked show answer
     if (showAnswerButton.value === "hidden") {
         showAnswerButton.value = "showing";
         showAnswerButton.innerHTML = "Hide Answer";
         answerList.style.display = "block";
-        // location.href = "#answer";
         nextQuestionButton.focus();
+        shown.value = "yes";
+        // location.href = "#answer";
+    // User clicked hide answer
     } else {
         showAnswerButton.value = "hidden";
         showAnswerButton.innerHTML = "Show Answer";
@@ -23,7 +24,3 @@ function showhide() {
 }
 
 showAnswerButton.addEventListener("click", showhide);
-
-// nextQuestionButton.addEventListener("click", function() {
-//     console.log("whatever");
-// });

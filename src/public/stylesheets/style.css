@@ -108,6 +108,12 @@ h1 {
 #nextform {
     display: inline-block;
 }
+#shown {
+    display: none;
+}
+/* #finishform {
+    display: none;
+} */
 #nextQuestionButton {
     display: inline-block;
 }
