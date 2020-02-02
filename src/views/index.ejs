@@ -1,59 +1,72 @@
 <!DOCTYPE html>
 <head>
-    <!-- <meta charset="utf-8" /> -->
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"> -->
-    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> -->
-    <link rel="stylesheet" href="public/stylesheets/style.css" type="text/css">
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/public/stylesheets/style.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans|Barlow+Semi+Condensed|Cuprum|Lato|News+Cycle|Open+Sans|Oxygen|Sarabun&display=swap" rel="stylesheet">
     <title>US Citizen Exam - Practice</title>
-    <!-- <link href="https://fonts.googleapis.com/css?family=Crimson+Text|Work+Sans:400,700" rel="stylesheet"> -->
-    <link href="https://fonts.googleapis.com/css?family=Quicksand:300,500" rel="stylesheet">
 </head>
+<html>
 <body>
-    <header class="header">
-        <h1>US Citizenship Interview - Practice Questions</h1>
-        <p>Practice all 100 USCIS interview questions.</p>
-    </header>
-    <form name="locationForm" action="/" method="POST">
-        <div id="selectContainer">
-                <label for="selectLocation" id="selectLabel">Choose your location: </label>
-                <select name="selectLocation" id="selectLocation">
-                    <option>Select location</option>
-                <% if (locals.userLocation) { %>
-                    <option selected value='<%= userLocation %>'><%= userLocation %></option>
-                <% } %>
-                <% for(var i=0; i < locationVals.length; i++) { %>
-                    <option value="<%= locationVals[i]['LOCATION'] %>"><%= locationVals[i]['LOCATION'] %></option>
-                <% } %>
-                </select>
-        </div>
-        <div id="zipContainer">
-            <label for="selectZip" id="selectZipLabel">Enter 5 digit zip code: </label>
-            <input name="selectZip" id="selectZip" type="text" placeholder="<%= zipVal %>" size="5" required>
-            <% if (locals.validationError) { %>
-                <p class="error"><%= validationError %></p>
-            <% } %>
-        </div>
-        <div id="locationContainer">
-            <button id="locationButton" class="button">Set location</button>
-            <!-- <% if (locals.userLocation) { %>
-                <option selected value='<%= userLocation %>'><%= userLocation %></option>
-            <% } %> -->
-            <!-- <button id="startButton" class="button">Start</button>
-            <button id="resetButton" class="button">Reset</button>     -->
-        </div>
-    </form>
-    <div id="container">
-        <div>
-            <p id="question">Question: How many States are there?</p>
-        </div>
-        <div id="answer">
-            <ul id="answerList">
-                <li class="answerLi">Answer: There are 50 states.</li>
-            </ul>
-        </div>
-    </div>
 
-    <script type="text/javascript" src="public/javascripts/citizen.js"></script>
+    <header class="header">
+        <h1>US Citizenship Naturalization Interview Prep</h1>
+        <p>Practice all 100 USCIS interview questions</p>
+    </header>
+
+    <div class="bodydiv">
+
+        <% if (locals.locationVals) { %>
+    
+            <form name="locationForm" action="/" method="POST">
+        
+                <div class="formContainer"> 
+                        <label for="selectLocation" id="selectLabel">Choose location: </label>
+                        <select name="selectLocation" id="selectLocation" class="cssForm">
+                            <option>Select location</option>
+                        <% if (locals.userLocation) { %>
+                            <option selected value='<%= userLocation %>'><%= userLocation %></option>
+                        <% } %>
+                        <% for(var i=0; i < locationVals.length; i++) { %>
+                            <option value="<%= locationVals[i]['LOCATION'] %>"><%= locationVals[i]['LOCATION'] %></option>
+                        <% } %>
+                        </select>
+                </div>
+                <div class="formContainer" id="zipContainer"> 
+                    <label for="selectZip" id="zipLabel">Enter 5 digit zip code: </label>
+                    <input name="selectZip" id="selectZip" class="cssForm" type="text" placeholder="<%= zipVal %>" size="5" required>
+                    <% if (locals.validationError) { %>
+                        <p id="error""><%= validationError %></p>
+                    <% } %>
+                </div>
+                <div class="formContainer" id="startContainer">
+                    <button id="setLocationButton" class="cssButton">Set Location</button>
+                </div>
+            </form>
+    
+        <% } else { %>
+    
+           <div id="userLocation">
+                <% if (locals.zipVal) { %>
+                    <p>Your location is: <%= userLocation %>, <%= zipVal %></p>
+                <% } else { %>
+                    <p>Your location is: <%= userLocation %></p>
+                <% } %>
+            </div>
+        
+            <div>
+                <form action="/reset" method="GET">
+                    <button id="resetButton" class="cssButton">Reset Location</button>
+                </form>
+            </div>
+    
+            <div>
+                <button onclick="window.location.href='/question/1'" id="startButton" class="cssButton">Start</button>
+            </div>
+    
+        <% } %>            
+
+    </div>    
+    <script type="text/javascript" src="/public/javascripts/citizen.js"></script>
 
 </body>
 </html>

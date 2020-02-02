@@ -1,183 +1,78 @@
-var selector = document.getElementById("selectLocation");
-var zipContainer = document.getElementById("zipContainer");
-var selectZip = document.getElementById("selectZip");
-// var selectZipLabel = document.getElementById("selectZipLabel");
-var locationButton = document.getElementById("locationButton");
-// var resetButton = document.getElementById("resetButton");
-// var startButton = document.getElementById("startButton");
-var selectLabel = document.getElementById("selectLabel");
-var navButtons = document.getElementById("navButtons");
-// var currentLocation = "";
-// var currentZip = "";
-var question = document.querySelector("#question");
-// var answer = document.querySelector("#answer");
+// Location selected by user from the dropdown menu
+const selector = document.getElementById("selectLocation");
+// User's location after hitting set location button
+const userLocation = document.getElementById("userLocation");
+// Label for location select dropdown menu 
+const selectLabel = document.getElementById("selectLabel");
+// Div containing the form element for zip, hidden by default
+const zipContainer = document.getElementById("zipContainer");
+// Form input requiring zip from user 
+const selectZip = document.getElementById("selectZip");
+// Set Location Button 
+const setLocationButton = document.getElementById("setLocationButton");
+// Start button
+const startButton = document.getElementById("startButton");
+// Validation error
+const validationError = document.getElementById("error");
 
-// var startButton = document.querySelector("#startButton");
-// var resetButton = document.querySelector("#resetButton");
-
-var answerList = document.getElementById("answerList");
-
+// Display the answer list as a block if location is selected
 document.addEventListener('DOMContentLoaded', function() {
-    if (!(selector.value === "Select location")) {
-        locationButton.style.display = "inline-block";
+
+    if (validationError) {
+        zipContainer.style.display = "block";
+        setLocationButton.style.display = "inline-block";
+        selectZip.focus();
+    } else if (startButton) {
+       startButton.focus(); 
+    } else {
+        selector.focus();
     }
-    answerList.style.display = "block";
+
 });
 
-selector.addEventListener("change", function() {
-    //nextQuestionButton.focus();
-    if (selector.value === "") {
-        selectLabel.innerHTML = "Choose your location: "
-    } else {
-        selectLabel.innerHTML = "Your Location is: ";
-        //currentLocation = selector.options[selector.selectedIndex].text;
-        if (!(selector.value === "American Samoa" || selector.value === "District Of Columbia" ||
-              selector.value === "Guam" || selector.value === "Northern Mariana Islands" ||
-              selector.value === "Puerto Rico" || selector.value === "Virgin Islands" ||
-              selector.value === "Alaska" || selector.value === "Delaware" || selector.value === "Montana" ||
-              selector.value === "North Dakota" || selector.value === "South Dakota" ||
-              selector.value === "Vermont" || selector.value === "Wyoming")) {
-                    selectZip.disabled = false;
-                    zipContainer.style.display = "block";
-                    locationButton.innerHTML = "Set location";
-                    selectZip.focus();
-        } else {
-            // Territory selected
+// When user selects a location, determine if a zip code is required
+// If zip code is required, prompt the user to enter their zip code
+if (selector) {
+
+    selector.addEventListener("change", function() {
+
+        // If no location is selected, prompt the user to choose a location
+        if (selector.value === "Select location") {
+
+            selectLabel.innerHTML = "Choose your location: "
             selectZip.disabled = true;
             zipContainer.style.display = "none";
-            locationButton.innerHTML = "Start";
-        }
-        locationButton.style.display = "inline-block";
-    }
-});
+            setLocationButton.style.display = "none";
 
-if (!(selector.value === "Select location")) {
-    zipContainer.style.display = "block";
-    locationContainer.style.display = "block";
-}
+            if (validationError) {
+                validationError.style.display = "none";
+            }
 
-
-// var keys = [];
-// for (var key in answerKey) {
-//     if (answerKey.hasOwnProperty(key)) {
-//         keys.push(key);
-// }}
-
-// let i = 0;
-// nextQuestionButton.addEventListener("click", function() {
-//     console.log("whatever");
-// });
-
-// startButton.addEventListener("click", start);
-// resetButton.addEventListener("click", reset);
-
-// function start() {
-//     currentLocation = selector.options[selector.selectedIndex].text;
-//     currentZip = selectZip.value;
-//     if (currentZip === "") {
-//         selectLocationLabel.innerHTML = "Location: " + currentLocation;
-//     } else {
-//         selectLocationLabel.innerHTML = "Location: " + currentLocation + " || " + "Zip Code: " + currentZip;
-//     }
-//     startButton.style.display = "none";
-//     resetButton.style.display = "inline-block";
-//     showAnswerButton.style.display = "inline-block";
-//     nextQuestionButton.style.display = "inline-block";
-//     selector.style.display = "none";  
-//     zipContainer.style.display = "none";
-//     //selectZip.style.display = "none";
-//     //electZipLabel.innerHTML = "Zip Code: " + currentZip;
-//     nextQuestion();
-//     updateAnswerKey();
-// }
-
-// function reset() {
-//     i = 0;
-//     while (answerList.firstChild) {
-//         answerList.removeChild(answerList.firstChild);
-//     }
-//     answerList.textContent = "Answer: This is the answer";
-//     showAnswerButton.style.display = "none";
-//     nextQuestionButton.style.display = "none";
-//     resetButton.style.display = "none";
-//     selector.style.display = "inline-block";
-//     selector.value = "";
-//     selectZip.value = "";
-//     answer.style.display = "block";
-//     selectLocationLabel.innerHTML = "Choose your location: ";
-//     question.textContent = "Question: How many States are there?";
-//     //answer.textContent = "Answer: This is the answer.";
-//     currentZip = "";
-//     currentLocation = "";
-// }
-
-// function updateAnswerKey() {
-//     for (var key in testUpdatesGen) {
-//         answerKey[key] = testUpdatesGen[key];
-//     }
-//     updateGeoKey();
-//     // if (!(currentZip === "")) {
-//         //     updateGeoKey();
-//         // }
-//     }
-    
-//     function updateGeoKey() {
-//         for (var geokey in testUpdatesGeo[currentLocation]) {
-//             answerKey[geokey] = testUpdatesGeo[currentLocation][geokey];
-//         }
-//     }
-    
-    
-    // function nextQuestion() {
-    //     if (i < Object.keys(answerKey).length) {
-    //         // alert(i);
-    //         question.textContent = keys[i];
-    //         //answer.textContent = answerKey[keys[i]];
-    //         answerStr = answerKey[keys[i]];
-    //         buildAnswerList(answerStr);
-    //         answer.style.display = "none";
-    //         nextQuestionButton.innerHTML = "Next Question";
-    //         showAnswerButton.innerHTML = "Show Answer";
-    //         showAnswerButton.value = "hide";
-    //         showAnswerButton.focus();
-    //         i++;
-    //         if (i >= keys.length) {
-    //             nextQuestionButton.innerHTML = "Finish";
-    //         }
-    //     } else {
-    //         finished();
-    //     }
-    // }
-    
-    // function buildAnswerList(answerStr) {
-    //     while (answerList.firstChild) {
-    //         answerList.removeChild(answerList.firstChild);
-    //     }
-    //     if (typeof answerStr === "string") {
-    //         //answer.textContent = answerStr;
-    //         var entry = document.createElement("li");
-    //         entry.appendChild(document.createTextNode(answerStr));
-    //         entry.setAttribute("style", "list-style: none;");
-    //         answerList.appendChild(entry);
+        } else {
+            setLocationButton.style.display = "inline-block";
+            selectLabel.innerHTML = "Your location is: ";
             
-    //     } else {
-    //         for (item in answerStr) {
-    //             var entry = document.createElement("li");
-    //             entry.appendChild(document.createTextNode(answerStr[item]));
-    //             answerList.appendChild(entry);
-    //         }
-    //     }
-    //     //var splitvar = answerStr.split(",");
-    //     //return answerList;
-    // }
-    
-    
-    
-// function finished() {
-//     alert("Finished");
-//     question.textContent = "Finished!";
-//     answer.style.display = "none";
-//     showAnswerButton.style.display = "none";
-//     nextQuestionButton.innerHTML = "Restart";
-//     i = 0;
-// }
+            // Location requires zip code
+            if (!(selector.value === "American Samoa" || selector.value === "District Of Columbia" ||
+            selector.value === "Guam" || selector.value === "Northern Mariana Islands" ||
+            selector.value === "Puerto Rico" || selector.value === "Virgin Islands" ||
+            selector.value === "Alaska" || selector.value === "Delaware" || selector.value === "Montana" ||
+            selector.value === "North Dakota" || selector.value === "South Dakota" ||
+            selector.value === "Vermont" || selector.value === "Wyoming")) {
+
+                selectZip.disabled = false;
+                zipContainer.style.display = "block";
+                selectZip.focus();
+
+            // Territory or District at Large (DAL) is selected, do not ask for zip code
+            } else {
+
+                selectZip.disabled = true;
+                zipContainer.style.display = "none";
+                setLocationButton.focus();
+
+            }
+        }
+
+    });
+}

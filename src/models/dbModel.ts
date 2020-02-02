@@ -24,7 +24,7 @@ class DataModel {
     }
     public static startZip = (location: any, zip: any) => {
         return new Promise((resolve, reject) => {
-        // final query for zips and reps
+        // final query for zips & reps
         // tslint:disable-next-line: max-line-length
             const setDistricts = "SELECT districts into @districts from zips where location = (?) and zip_code = (?)";
             const setVariable = mysql2.format(setDistricts, [location, zip]);
@@ -63,7 +63,7 @@ class DataModel {
         return new Promise((resolve, reject) => {
             // final query for territories
             // tslint:disable-next-line: no-console
-            console.log("in dbmodel territory: ");
+            console.log("in dbmodel territory: " + location);
             // tslint:disable-next-line: max-line-length
             const query = "select questions.question_id, questions.question, questions.answer \
             FROM questions where not exists \

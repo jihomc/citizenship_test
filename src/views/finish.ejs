@@ -1,37 +1,37 @@
 <!DOCTYPE html>
 <head>
-    <!-- <meta charset="utf-8" /> -->
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"> -->
-    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> -->
-    <link rel="stylesheet" href="public/stylesheets/style.css" type="text/css">
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/public/stylesheets/style.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans|Barlow+Semi+Condensed|Cuprum|Lato|News+Cycle|Open+Sans|Oxygen|Sarabun&display=swap" rel="stylesheet">
     <title>US Citizen Exam - Practice</title>
-    <!-- <link href="https://fonts.googleapis.com/css?family=Crimson+Text|Work+Sans:400,700" rel="stylesheet"> -->
-    <link href="https://fonts.googleapis.com/css?family=Quicksand:300,500" rel="stylesheet">
 </head>
 <body>
     <header class="header">
-        <h1>US Citizenship Interview - Practice Questions</h1>
-        <p>Practice all 100 USCIS interview questions.</p>
+        <h1>US Citizenship Naturalization Interview Prep</h1>
+        <p>Practice all 100 USCIS interview questions</p>
     </header>
-    <div>
-        <p>Thank you for using this app!</p>
-        <p>Restart?</p>
-        <form action="/start", method="GET">
-            <button id="restart" class="button">Restart</button>
-        </form>
-    </div>
-    <div id="container">
-            <div>
-                <p id="question">Questions practiced: <%= practiced %></p>
-            </div>
-            <div id="answer">
-                <ul id="answerList">
-                    <li class="answerLi">Answers shown: <%= shown %></li>
-                </ul>
+
+    <div class=bodydiv>
+        <div id="flashCard">
+            <div class="container-button">
+
+                <div >
+                    <p>Great work!</p>
+                </div>
+                <div >
+                    <p>Questions practiced: <%= practiced %></p>
+                </div>
+                <div class="red">
+                    <p>Answers shown: <%= shown %></p> 
+                </div>
+                <div >
+                    <button onclick="window.location.href='/question/1'" class="cssButton">Restart</button>
+                </div>
+
             </div>
         </div>
+    </div>
 
     <script type="text/javascript" src="public/javascripts/finish.js"></script>
-
 </body>
 </html>

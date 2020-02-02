@@ -1,62 +1,75 @@
 <!DOCTYPE html>
 <head>
-    <!-- <meta charset="utf-8" /> -->
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"> -->
-    <!-- <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons"> -->
-    <link rel="stylesheet" href="public/stylesheets/style.css" type="text/css">
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/public/stylesheets/style.css" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans|Barlow+Semi+Condensed|Cuprum|Lato|News+Cycle|Open+Sans|Oxygen|Sarabun&display=swap" rel="stylesheet">
     <title>US Citizen Exam - Practice</title>
-    <!-- <link href="https://fonts.googleapis.com/css?family=Crimson+Text|Work+Sans:400,700" rel="stylesheet"> -->
-    <link href="https://fonts.googleapis.com/css?family=Quicksand:300,500" rel="stylesheet">
 </head>
+<html>
 <body>
-    <header class="header">
-        <h1>US Citizenship Interview - Practice Questions</h1>
-        <p>Practice all 100 USCIS interview questions.</p>
-    </header>
-    <div>
-        <p>Your location is: <%= userLocation %></p>
-        <% if (locals.zipVal) { %>
-            <p>Your zip is: <%= zipVal %></p>
-        <% } %>
-        <form action="/" method="GET">
-            <!-- <input type="submit" value="Reset" /> -->
-            <button class="button">Reset</button>
-        </form>
-    </div>
-    <div id="container">
+
+    <div class="bodydiv">
+
         <div>
-            <p id="question"><%= question %></p>
-        </div>
-        <div id="answer">
-            <ul id="answerList">
-                <% for(var i=0; i < answer.length; i++) { %>
-                    <li class="answerLi"><%= answer[i] %></li>
-                <% } %>
-            </ul>
-        </div>
-        <div id="button-area">
-            <button id="showAnswerButton" value="hidden">Show Answer</button>
-            <% if (q_index >= 0 && q_index <= 98) { %>
-                <form id="nextform" action="/start" method="POST">
-                    <input name="q_index" id="q_index" type="number" value="<%= q_index %>" />
-                    <input name="shown" id="shown" type="text" value="no"/>
-                    <button id="nextQuestionButton" class="button">Next Question</button>
-                </form>
-            <% } %>
-            <% if (q_index === 99) { %>
-                <form id="finishform" action="/finished" method="GET">
-                    <button id="finishedButton" class="button">Finished</button>
-                </form>
+            <% if (locals.zipVal) { %>
+                <p>Your location is: <%= userLocation %>, <%= zipVal %></p>
+            <% } else { %>
+                <p>Your location is: <%= userLocation %></p>
             <% } %>
         </div>
-    </div>
-    <div id="finished">
-            <form id="finishform" action="/finish" method="GET">
-                <button id="finishedButton" class="button">Finished</button>
+    
+        <div>
+            <form action="/reset" method="GET">
+                <button id="resetButton" class="cssButton">Reset Location</button>
             </form>
-    </div>
+        </div>
 
-    <script type="text/javascript" src="public/javascripts/start.js"></script>
+    </div>    
 
+    <div class="bodydiv">
+
+        <div id="flashCard">
+    
+            <div class="container-button">
+
+                <div id="question">
+                   <p><%= question %></p>
+                </div>
+        
+                <div id="answer">
+                    <ul id="answerList">
+                        <% for(var i=0; i < answer.length; i++) { %>
+                            <li id="answerLi"><%= answer[i] %></li>
+                        <% } %>
+                    </ul>
+                </div>
+        
+            </div>
+            <div class="container-button">
+               
+                <button id="showAnswerButton" class="cssButton" value="hidden">Show Answer</button>
+    
+                <% if (q_index < 100) { %>
+                    <form id="nextForm" action="/question/<%= next %>" method="POST" >
+                        <input name="nextInput" id="shown2" class="shown"/>
+                        <button type="submit" id="nextQuestionButton" class="cssButton">Next Question</button>
+                    </form>
+                <% } %>
+    
+                <div>
+                    <form id="finishForm" action="/finish" method="POST">
+                        <input name="finishInput" id="shown" class="shown"/>
+                        <button id="finishedButton" class="cssButton">Finish</button>
+                    </form>
+                </div>
+
+            </div>
+    
+    
+        </div>
+
+    </div>    
+
+    <script type="text/javascript" src="/public/javascripts/start.js"></script>
 </body>
 </html>

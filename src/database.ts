@@ -1,42 +1,19 @@
-// import { createPool, Pool } from "mysql";
-// import mysql from "mysql";
-// import mysql2 from "mysql2";
+// Import .env configuration
+import dotenv from "dotenv";
+// Import mysql2/promise client
 import mysql2 from "mysql2/promise";
 
-// export async function connection(): Promise<Pool> {
-//     const connect = await mysql2.createPool({
-//         connectionLimit: 10,
-//         database: process.env.DATABASE || "citizen",
-//         host: process.env.HOST || "localhost",
-//         password: process.env.PASSWORD || "bar",
-//         user: process.env.USER || "foo"
-//     });
-//     return connect;
+// Initialize .env configuration
+dotenv.config();
 
-// const connection = mysql2.createConnection({
-//     database: process.env.DATABASE || "citizen",
-//     host: process.env.HOST || "localhost",
-//     password: process.env.PASSWORD || "bar",
-//     user: process.env.USER || "foo"
-// });
-
-// connection.connect();
-
+// Create connection pool
 const pool = mysql2.createPool({
     connectionLimit: 10,
-    database: process.env.DATABASE || "citizen",
-    host: process.env.HOST || "localhost",
+    database: process.env.DATABASE,
+    host: process.env.HOST,
     multipleStatements: true,
-    password: process.env.PASSWORD || "bar",
-    user: process.env.USER || "foo",
+    password: process.env.PASSWORD,
+    user: process.env.USER,
 });
 
-// const getConnection = () => pool.getConnection();
-// export { getConnection };
-
-// pool.on("connection", (connection) => {
-//     connection.query("SET SESSION auto_increment_increment=1");
-//   });
-
-// export default connection;
 export default pool;

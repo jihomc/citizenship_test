@@ -13,18 +13,12 @@ router.post( "/", (req, res, next) => {
     homeController.setLocation(req, res);
 });
 
-// define GET route hander for start
-router.get( "/start", (req, res, next) => {
-    homeController.start(req, res);
-});
-
-// define POST route handler for start
-router.post( "/start", (req, res, next) => {
-    homeController.next(req, res);
+router.get( "/reset", (req, res, next) => {
+    homeController.reset(req, res);
 });
 
 // define GET route handler for finished
-router.get( "/finish", (req, res, next) => {
+router.post( "/finish", (req, res, next) => {
     homeController.finish(req, res);
 });
 export default router;

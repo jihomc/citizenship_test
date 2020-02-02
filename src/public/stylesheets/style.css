@@ -1,123 +1,323 @@
+/* Colors in Pallete
+#f1f1f1	(241,241,241)
+#002868	(0,40,104)
+#ffffff	(255,255,255)
+#bf0a30	(191,10,48)
+#000000	(0,0,0)
+*/
 html {
-    background: linear-gradient(rgba(255,255,255,.80), rgba(255,255,255,.80)),
-    url(../images/usa.jpg);
-    background-size: cover;
+    background: linear-gradient(rgba(255,255,255,.90), rgba(255,255,255,.90)),
+    url(../images/usa.jpg) no-repeat fixed center;
+    height: 100%;
 }
 body {
-    font-family: 'Lato', sans-serif;
-    width: 100%;
-    height: 100%;
+    min-height: 100%;
     margin: 0 auto;
+    text-align: center;
+    color: #002868;
+    font-size: 18px;
+    font-weight: 500;
+    font-family: 'Lato', sans-serif;
+}
+.bodydiv {
+    margin: 50px auto;
+    max-width: 80%;
     text-align: center;
 }
 header {
-    font-family: 'Prata';
+    margin: 100px auto;
+    font-weight: 525;
+}
+h1 {
     margin: 50px auto;
 }
 header p {
     color: #BF0A30;
-    font-size: 1.2em;
+    font-size: 1.5em;
+    margin: 50px auto;
 }
-h1 {
-    color: #3c3b6e;
+
+/* Form styling */
+
+.formContainer {
+    margin: 50px 25px;
+    font-size: 18px;
+    color: #444;
 }
-#locationContainer {
-    /* display: none; */
-    margin: 25px auto;
+
+.cssForm {
+	font-size: 16px;
+    text-align: center;
+	line-height: 1.3;
+	padding: .6em 1.4em .5em .8em;
+	max-width: 100%;
+	margin: 0;
+	border: 1px solid #aaa;
+	box-shadow: 0 1px 0 1px rgba(0,0,0,.04);
+    border-radius: .5em;
+    /* Appearance rules unset some default browser select styling */
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	appearance: none;
+	background-color: #fff;
 }
-#locationButton {
+
+.cssForm::-ms-expand {
     display: none;
 }
 
-#startButton {
-    display: none;
+.cssForm:hover {
+    border-color: #888;
 }
 
-#resetButton {
-    display: none;
+.cssForm:focus {
+    border-color: #aaa;
+	box-shadow: 0 0 0.5px 1.5px rgba(59, 153, 252, .5);
+	box-shadow: 0 0 0 0.5px -moz-mac-focusring;
+	color: #222;
+	outline: none;
 }
 
-#selectLabel, #selectZipLabel{
-    font-size: 14px;
+.cssForm option {
+    font-weight:normal;
+}
+
+#selectLocation {
+    background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'),
+      linear-gradient(to bottom, #ffffff 0%,#e5e5e5 100%);
+    background-repeat: no-repeat, repeat;
+    background-position: right .7em top 50%, 0 0;
+    background-size: .65em auto, 100%;
+}
+
+#selectZip {
+    background: linear-gradient(to bottom, #ffffff 0%,#e5e5e5 100%);
+    text-align: center;
 }
 
 #zipContainer {
-    margin: 25px auto;
     display: none;
 }
 
-#navButtons {
-    margin: 25px auto;
-    display: none;
-}
-#startButton {
-    border-style: 1px;
-    border-color: #3c3b6e;
-    display: none;
-}
-#resetButton {
-    border-style: 1px;
-    border-color: black;
-    display: none;
-}
-#container {
-    max-width: 50%;
-    margin: 50px auto;
-    padding: 1em;
-    border: 1px solid #3c3b6e;
-    border-radius: 10px;
-    border-color: rgba(60, 59, 110, 0.4);
-    /* border-color: rgba(191, 10, 48, 0.4); */
-    background-color: rgba(255, 255, 255, 0.6);
-    /* background-color: rgba(191, 10, 48, 0.075); */
-}
-#question, #answer, #button-area{
-    margin: 50px auto;
-    max-width: 90%;
-    /* border: 1px solid black; */
-    
-}
-#question {
-    color: #3c3b6e;
-    line-height: 1.7em;
-    font-size: 1.2em;
-}
-/* unordered list */
-#answerList {
-    padding: 0;
-    display: none;
-}
-/* list items */
-.answerLi {
-    list-style: none;
-    font-size: 1.15em;
-    margin: 15px auto;
-    /* padding: auto; */
-    /* margin: auto; */
-    width: 100%;
+#error {
     color: #BF0A30;
-    
+}
+
+.red {
+    color: #BF0A30;
+}
+
+/* Button styling */
+
+.cssButton {
+    background-color: rgba(0,40,104,0.7);
+    border: 1px solid rgba(241,241,241,0.8);
+    border-radius: 6px;
+    color: #ffffff;
+    padding: 0.5rem 1.3rem;
+    display: inline-block;
+    font-family: 'Oxygen';
+    font-size: 16px;
+    margin: 20px 20px;
+}
+
+.cssButton:focus {
+    background-color: rgba(0,40,104,0.9);
+    box-shadow: 0 0 0.5px 1.5px rgba(59, 153, 252, .3);
+    outline: none;
+}
+
+.cssButton:hover {
+    background-color: #002868;
+    color: white;
+    transition: all .2s ease;
+    transition-property: all;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+    transition-delay: 0s;
+}
+
+.cssButton:active {
+    box-shadow: 0 8px 12px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+    transform: translateY(1px);
+    filter: saturate(125%);
+}
+
+#resetButton {
+    text-align: center;
+    font-size: 12px;
+    color: black;
+    background: linear-gradient(to bottom, #ffffff 0%,#e5e5e5 100%);
+    border: 1px solid #aaa; 
+    padding: 0.4rem .8rem;
+    font-weight: 500;
+    margin: 5px auto;
+}
+
+#finishedButton {
+    background-color: rgba(191,10,48,0.8);
+}
+
+#finishedButton:focus {
+    background-color: rgba(191,10,48,0.9);
+}
+
+#finishedButton:hover {
+    background-color: rgba(191,10,48);
+}
+
+#setLocationButton {
+    display: none;
+    margin: 25px auto;
+}
+
+#startButton {
+    margin: 50px auto;
+}
+
+#flashCard {
+    float: center;
+    width: auto;
+    font-size: 1.2em;
+    max-width: 750px;
+    margin: 50px auto;
+    padding: 1.4em;
+    border: 1px solid;
+    border-radius: 10px;
+    border-color: rgba(0,40,104,0.4);
+    background-color: rgba(255, 255, 255, 0.6);
+    overflow-y: auto;
+}
+
+.container-button {
+    margin: 50px 25px;
+    display: block;
+    line-height: 30px;
+}
+
+#answer {
+    margin: 50px auto;
+}
+
+#question {
+    margin: 50px 100px;
+    line-height: 1.5em;
+}
+
+#answerList {
+    list-style-type: none;
+    display: none;
+    padding: 0;
+    margin: auto 35px;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+}
+
+.columns {
+    columns: 2;
+    -webkit-columns: 2;
+    -moz-columns: 2;
+    padding: 0;
+    min-width: 50%;
+    max-width: 100%;
+    margin: auto 80px;
+}
+
+#answerLi {
+    float: center;
+    color: #BF0A30;
+    box-sizing: border-box;
+    height: auto;
+    padding: 6px 0px;
+}
+
+.answerLiHeight {
+    height: 75px;
 }
 
 #showAnswerButton {
     display: inline-block;
 }
-#showAnswerButton:focus {
-    border: 1px dotted #3c3b6e;
+
+@media only screen and (min-width:427px) and (max-width:1200px) {
+/* and (max-width:990px){ */
+    #flashCard{
+       width: 90%; 
+
+    }
 }
-#nextform {
-    display: inline-block;
-}
-#shown {
-    display: none;
-}
-/* #finishform {
-    display: none;
-} */
-#nextQuestionButton {
-    display: inline-block;
+/* 426px */
+@media only screen and (max-width:426px) {
+/* and (max-width:990px){ */
+    header{
+        margin: 25px auto;
+        padding: 0px 5px;
+    }
+    h1{
+        font-size: 1.5em;
+    }
+    header p{
+        font-size: 1.2em;
+    }
+    .bodydiv{
+        margin: 45px auto;
+        max-width: 95%;
+    }
+    .formContainer{
+        margin: auto auto;
+        font-size: 16px;
+    }
+    .cssForm{
+        margin: 15px 5px;
+        padding: .5em 2em .5em .8em;
+        font-family: 'Lato';
+        font-size: 16px;
+        color: #444;
+    }
+    #flashCard{
+       font-size: 1em;
+       margin: 25px auto;
+    }
+    .container-button{
+        margin: 25px 10px;
+        line-height: 25px;
+        height: 100%;
+    }
+    #question{
+        margin: 5px 5px;
+    }
+    #answer{
+        margin: 10px auto;
+    }
+    #answerList{
+        margin: auto auto;
+        width: 100%;
+    }
+    .columns {
+        columns: 1;
+        -webkit-columns: 1;
+    }
+    #answerLi{
+        margin: 1px auto;
+        height: auto;
+        box-sizing: content-box;
+    }
+    .answerLiHeight{
+        height: 75px;
+    }
+    .cssButton{
+       font-size: 0.9rem;
+       margin: 10px 10px;
+    }
 }
 
+#nextForm {
+    display: inline-block;
+}
+.shown {
+    display: none;
+}
 #q_index {
     display: none;
 }
