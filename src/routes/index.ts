@@ -13,11 +13,12 @@ router.post( "/", (req, res, next) => {
     homeController.setLocation(req, res);
 });
 
+// define GET route handler for resetting location
 router.get( "/reset", (req, res, next) => {
     homeController.reset(req, res);
 });
 
-// define GET route handler for finished
+// define GET route handler for finish button
 router.post( "/finish", (req, res, next) => {
     homeController.finish(req, res);
 });

@@ -9,7 +9,6 @@ let qalist: any;
 let answersShown: number = 0;
 let questionsPracticed: number = 0;
 let values: any;
-
 class HomeController {
 
     // Call async function home to retrieve locations from database
@@ -33,15 +32,9 @@ class HomeController {
             // User's selected location value
             location = req.body.selectLocation;
 
-            // tslint:disable-next-line: no-console
-            console.log("req.body.selectLocation: " + location);
-
             // If user enters a zip code, check if it exists in the database
             if (req.body.selectZip) {
                 zip = req.body.selectZip;
-
-                // tslint:disable-next-line: no-console
-                console.log("req.body.zelectZip: " + req.body.selectZip);
 
                 // Validate user's zip code against the database
                 const validation = await DataModel.checkZip(location, zip);
@@ -52,11 +45,7 @@ class HomeController {
 
                 // Zip matched, redirect to start route
                 } else {
-                    // res.redirect("/start1");
-                    // res.render("index", { locationVals: locationlist, userLocation: location, zipVal: zip } );
-
                     values = await DataModel.startZip(location, zip);
-
                     qalist = JSON.parse(JSON.stringify(values));
                     qalist = qalist[0].sort((a: { question_id: number; }, b: { question_id: number; }) => (a.question_id > b.question_id ? 1 : -1));
                 }
@@ -65,12 +54,9 @@ class HomeController {
             // Territories and states with one congressional district do not require zip
             } else {
                 zip = null;
-                // res.redirect("/start1");
-                // res.render("index", { locationVals: locationlist, userLocation: location, zipVal: zip } );
 
                 if (location === "American Samoa" || location === "District Of Columbia" || location === "Guam" || location === "Northern Mariana Islands" || location === "Puerto Rico" || location === "Virgin Islands") {
-                    // tslint:disable-next-line: no-console
-                    console.log("got to territories");
+
                     // Get questions and answers from database
                     values = await DataModel.startTerritory(location);
 
@@ -86,8 +72,8 @@ class HomeController {
 
             }
 
+            // Render the home page displaying user's selected location and zip code
             res.render("index", { userLocation: location, zipVal: zip } );
-            // res.render("index", { locationVals: locationlist, userLocation: location, zipVal: zip,  } );
 
         } catch (err) {
             throw (err);
@@ -98,10 +84,6 @@ class HomeController {
     public static reset = async (req: Request, res: Response): Promise<Response | void> => {
         try {
 
-            // Await for locationMenu promise to resolve the location list
-            // locationlist = await DataModel.locationMenu();
-
-            // Render home page with locations pre-populated in the dropdown menu
             res.redirect("/");
 
         } catch (err) {
@@ -119,8 +101,7 @@ class HomeController {
 
             // Zip code is validated
             if (zip) {
-                // tslint:disable-next-line: no-console
-                console.log("if zip: " + zip);
+
                 // Get questions and answers from database with location and zip
                 const startZip = await DataModel.startZip(location, zip);
 
@@ -134,8 +115,6 @@ class HomeController {
             // For territories, only location is required for the database query
             } else {
 
-                // tslint:disable-next-line: no-console
-                console.log("no zip: " + zip);
                 if (location === "American Samoa" || location === "District Of Columbia" || location === "Guam" || location === "Northern Mariana Islands" || location === "Puerto Rico" || location === "Virgin Islands") {
 
                     // Get questions and answers from database
@@ -168,7 +147,7 @@ class HomeController {
         }
     }
 
-    // Render the next practice question
+    // GET request for the current question (accessible via URL)
     public static question = async (req: Request, res: Response): Promise<Request | void> => {
         try {
 
@@ -178,7 +157,6 @@ class HomeController {
             const QID = questionId - 1;
             // URL parameter passed into the html template for the next question button
             const nextQuestion = (QID + 2);
-
             // Keep track of questions practiced
             questionsPracticed += 1;
 
@@ -189,6 +167,7 @@ class HomeController {
         }
     }
 
+    // View next question after pressing the next question button
     public static next = async (req: Request, res: Response): Promise<Request | void> => {
         try {
 
@@ -201,24 +180,12 @@ class HomeController {
 
             // Keep track of questions practiced
             questionsPracticed += 1;
-
-            // tslint:disable-next-line: no-console
-            console.log("before, answersShown: " + answersShown);
-            // tslint:disable-next-line: no-console
-            console.log("req.body.nextInput " + req.body.nextInput);
-            // tslint:disable-next-line: no-console
-            console.log(typeof req.body.nextInput);
-
+            // Keep track of answers shown
             if (req.body.nextInput) {
                 answersShown += Number(req.body.nextInput);
-                // tslint:disable-next-line: no-console
-                console.log("req.body.shown = " + req.body.nextInput);
-                // tslint:disable-next-line: no-console
-                console.log("after, answersShown: " + answersShown);
             }
 
-            // Keep track of questions shown
-
+            // Render the next question
             res.render("start", { userLocation: location, zipVal: zip, question: qalist[QID].question, answer: JSON.parse(qalist[QID].answer), q_index: questionId, next: nextQuestion });
 
         } catch (err) {
@@ -228,17 +195,11 @@ class HomeController {
 
     public static finish = async (req: Request, res: Response): Promise<Request | void> => {
         try {
-            // tslint:disable-next-line: no-console
-            console.log("shown value before finishing: " + req.body.finishInput);
-            // tslint:disable-next-line: no-console
-            console.log(typeof req.body.finishInput);
-            // tslint:disable-next-line: no-console
-            console.log("answersShown: " + answersShown);
-            // tslint:disable-next-line: no-console
-            console.log(typeof answersShown);
 
+            // Final tally of the answers shown
             answersShown += Number(req.body.finishInput);
 
+            // Render finish page, displaying simple statistics from practice
             res.render("finish", {practiced: questionsPracticed, shown: answersShown });
 
         } catch (err) {
