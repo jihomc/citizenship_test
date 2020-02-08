@@ -97,10 +97,10 @@ go().then(qa_list => {
     })
     
     // CREATE DATABASE citizen
-    connection.query('CREATE DATABASE citizen', function(err, results) {
-        if (err) throw err;
-        console.log("Created database: citizen " + results);
-    })
+    // connection.query('CREATE DATABASE citizen', function(err, results) {
+    //     if (err) throw err;
+    //     console.log("Created database: citizen " + results);
+    // })
     
     // USE citizen database
     connection.changeUser({database: 'citizen'}, function(err) {
