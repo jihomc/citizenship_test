@@ -9,11 +9,11 @@ dotenv.config();
 // Create connection pool
 const pool = mysql2.createPool({
     connectionLimit: 10,
-    database: process.env.DATABASE,
-    host: process.env.HOST,
+    database: process.env.MYSQL_DATABASE,
+    host: process.env.MYSQL_HOSTNAME,
     multipleStatements: true,
-    password: process.env.PASSWORD,
-    user: process.env.USER,
+    password: process.env.MYSQL_PASSWORD,
+    user: process.env.MYSQL_USERNAME,
 });
 
 export default pool;
