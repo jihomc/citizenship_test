@@ -9,7 +9,7 @@ import {questions} from "./routes/questions";
 dotenv.config();
 
 // Set port from environment variable
-const port = process.env.SERVER_PORT;
+const port = process.env.SERVER_PORT || 8080;
 
 const app = express();
 
