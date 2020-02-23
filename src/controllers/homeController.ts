@@ -152,7 +152,7 @@ class HomeController {
         try {
 
             // GET request parameter to capture the question id
-            const questionId = req.params.questionId;
+            const questionId: any = req.params.questionId;
             // Index for the question & answer list array, starting with 0
             const QID = questionId - 1;
             // URL parameter passed into the html template for the next question button
@@ -172,7 +172,7 @@ class HomeController {
         try {
 
             // GET request parameter to capture the question id
-            const questionId = req.params.questionId;
+            const questionId: any = req.params.questionId;
             // Index for the question & answer list array, starting with 0
             const QID = questionId - 1;
             // URL parameter passed into the html template for the next question button

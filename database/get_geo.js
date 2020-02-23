@@ -29,7 +29,6 @@ const get_geo = async() => {
     };
     
     const get_capitals = {
-        // uri: 'https://simple.wikipedia.org/wiki/List_of_U.S._state_capitals',
         uri: 'https://en.wikipedia.org/wiki/Template:US_state_capitals',
         transform: function(body) {
             return cheerio.load(body);
@@ -108,11 +107,7 @@ const get_geo = async() => {
         
         caplist = Object.values(locations).sort();
         
-        // console.log(locations);
-        // console.log(locations["GU"][0]);
-        // console.log(capitals);
-
-        
+                
         // iterate over each div to get state/territory and governors
 
         // relevant structure for governors.html
@@ -122,26 +117,23 @@ const get_geo = async() => {
         // </div>
 
         $governors('.bklyn-team-member-info').each((i, el) => {
+
             let location = $governors(el).find('.bklyn-team-member-name').text()
             let governor = $governors(el).find('.bklyn-team-member-description').text()
             let question_id = "43"
+
             // push arrays with question_id into govlist for geo table
             govlist.push([location, question_id, JSON.stringify([governor])]);
+
         });
 
         // add govlist answer for District Of Columbia.
         govlist.push([locations["DC"][0], '43', '["D.C. does not have a Governor"]']);
 
-       
-
 
         // iterate over senators.html <member> tags to get senator first name, last name, and state
         // push arrays into senlist for geo table insert
         $senators('member').each((i, el) => {
-            // $senators(el).find('last_name, first_name, state').each((i, elem) => {
-            //     console.log($senators(elem)[i].text());
-            //     templist.unshift($senators(el).text());
-            // });
 
             let states = $senators(el).find('state').text();
             states = locations[states][0];
@@ -150,13 +142,16 @@ const get_geo = async() => {
             // map results into namelist object
 
             let namelist = $senators(el).find('first_name, last_name').map(function(i, el) {         
+
                 let name = $senators(el).text();
+
                 // for first_name tags with suffix included in the text, split by comma into an array [first, suffix]
                 if (name.indexOf(',') > -1) {
                     name = name.split(', ');
                 };
-                // console.log(name);
+
                 return name;
+
                 // join last_name with [first_name, suffix], result is a list of arrays
                 // reverse to reorder names
                 }).get().join().split(',').reverse();
@@ -172,13 +167,9 @@ const get_geo = async() => {
             // push results into one array
             senlist.push([states, '20', [namelist]]);
             
-                // templist[0] = locations[templist[0]];
-                // senlist.push(templist);
-                // templist = [];
-                // console.log($senators(el).text());
             });
-            
         
+
         // create list of arrays for each state with senators merged into one stringified array
         // sort senator list by state
         senlist.sort();
@@ -193,8 +184,8 @@ const get_geo = async() => {
                 senlist.splice((i+1), 1);
             };
         };
-
         
+
         // simpler version of loop over locations and senlist to get missing territories
         for (values in locations) {
             if (values === "AS" || values === "GU" || values === "MP" || values === "PR" || values === "VI") {
@@ -204,11 +195,6 @@ const get_geo = async() => {
                 senlist.push([locations[values][0], '20', JSON.stringify(["D.C. has no U.S. Senators"])]);
             }
         };
-
-
-        // console.log(senlist);
-        // console.log(govlist);
-        // console.log(caplist);
 
         let geolist = [caplist, govlist, senlist];
         return geolist;
@@ -226,10 +212,10 @@ get_geo().then(geolist => {
     var mysql = require('mysql');
 
     var connection = mysql.createConnection({
-        host: "localhost",
-        user: "foo",
-        password: "bar",
-        database: "citizen"
+        host: process.env.MYSQL_HOSTNAME,
+        user: process.env.MYSQL_USER,
+        password: process.env.MYSQL_PASSWORD,
+        database: process.env.MYSQL_DATABASE
     });
 
     connection.connect(function(err) {
@@ -267,87 +253,12 @@ get_geo().then(geolist => {
     // Test query on geo table
     connection.query('SELECT location, question_id, answer FROM geo', function(err, rows, fields) {
         if (err) throw err;
-        // console.log(rows[0].location, rows[0].question_id, rows[0].answer);
         var answerlist = JSON.parse(rows[0].answer);
         console.log(answerlist);
         console.log(answerlist[0]);
     })
 
-    // console.log(qa_list);
-
     connection.end();
-
 
 })
 .catch(err => console.error(err));
-
-
-
-
-
-
-// Scrape geo websites and create html files for capitals, governors, and senators
-
-// const geo_files = async() => {
-
-//     const senators = {
-//         uri: 'https://www.senate.gov/general/contact_information/senators_cfm.xml',
-//         transform: function(body) {
-//             return cheerio.load(body);
-//         }
-//     };
-
-//     const capitals = {
-//         // uri: 'https://simple.wikipedia.org/wiki/List_of_U.S._state_capitals',
-//         uri: 'https://en.wikipedia.org/wiki/Template:US_state_capitals',
-//         transform: function(body) {
-//             return cheerio.load(body);
-//         }
-//     };
-
-//     const governors = {
-//         // uri: 'https://www.nga.org/governors',
-//         uri: 'https://www.nga.org/governors',
-//         transform: function(body) {
-//             return cheerio.load(body);
-//         }
-//     };
-
-//     try {
-//         const $capitals = await request(capitals);
-//         const $governors = await request(governors);
-//         const $senators = await request(senators);
-//         let files = [$capitals.html(), $governors.html(), $senators.html()];
-
-//         return files;
-//     }
-//     catch (err) {
-//         console.log(err);
-//     }
-// };
-
-// geo_files().then(files => {
-
-//     fs.writeFile("./capitals.html", files[0], function(err) {
-//         if(err) {
-//             return console.log(err);
-//         }
-//         console.log("The file capitals.html was saved!");
-//     })
-
-//     fs.writeFile("./governors.html", files[1], function(err) {
-//         if(err) {
-//             return console.log(err);
-//         }
-//         console.log("The file governors.html was saved!");
-//     })
-
-//     fs.writeFile("./senators.html", files[2], function(err) {
-//         if(err) {
-//             return console.log(err);
-//         }
-//         console.log("The file senators.html was saved!");
-//     })
-
-// })
-// .catch(err => console.error(err));

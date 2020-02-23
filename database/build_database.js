@@ -81,10 +81,10 @@ go().then(qa_list => {
     var mysql = require('mysql');
     
     var connection = mysql.createConnection({
-        host: "localhost",
-        user: "foo",
-        password: "bar",
-        // database: "citizen"
+        host: process.env.MYSQL_HOSTNAME,
+        user: process.env.MYSQL_USER,
+        password: process.env.MYSQL_PASSWORD,
+        database: process.env.MYSQL_DATABASE
     });
     
     // Establish connection to mysql
@@ -95,19 +95,7 @@ go().then(qa_list => {
         }
         console.log('connected as id ' + connection.threadId);
     })
-    
-    // CREATE DATABASE citizen
-    // connection.query('CREATE DATABASE citizen', function(err, results) {
-    //     if (err) throw err;
-    //     console.log("Created database: citizen " + results);
-    // })
-    
-    // USE citizen database
-    connection.changeUser({database: 'citizen'}, function(err) {
-        if (err) throw err;
-        console.log('Using database citizen');
-    })
-    
+       
     // CREATE TABLE users
     var create_users = "CREATE TABLE users (user_id INT AUTO_INCREMENT PRIMARY KEY, \
         first_name VARCHAR(50), last_name VARCHAR(50), email VARCHAR(50), \
@@ -138,13 +126,11 @@ go().then(qa_list => {
         console.log('Created table: geo ' + result);
     })
             
-            
     // CREATE TABLE reps
     var create_reps = "CREATE TABLE reps (location VARCHAR(50), district INT, \
         representative VARCHAR(50), question_id INT, \
         PRIMARY KEY(location, district), \
         FOREIGN KEY(question_id) REFERENCES questions(question_id))";
-        // FOREIGN KEY(location) REFERENCES geo(location), \
     
     connection.query(create_reps, function(err, result) {
         if (err) throw err;
@@ -155,14 +141,11 @@ go().then(qa_list => {
     var create_zips = "CREATE TABLE zips (location VARCHAR(50), zip_code INT, \
         districts VARCHAR(100), \
         PRIMARY KEY(location, zip_code))";
-        // FOREIGN KEY(location, question_id) REFERENCES geo(location, question_id), \
-        // FOREIGN KEY(question_id) REFERENCES geo(question_id))";
     
     connection.query(create_zips, function(err, result) {
         if (err) throw err;
         console.log('Created table: zips ' + result);
     })
-    
     
     // INSERT qa_list INTO questions table
     var insert_qa_list = "INSERT INTO questions (question, answer) VALUES ?";
@@ -181,75 +164,7 @@ go().then(qa_list => {
         console.log(questions);
     })
     
-    // console.log(qa_list);
-    
     connection.end();
     
 })
 .catch(err => console.error(err));
-
-
-
-
-
-
-
-
-
-//----------previous----------------------
-    
-    // const options = {
-    //     // uri: "https://www.uscis.gov/citizenship/educators/educational-products/100-civics-questions-and-answers-mp3-audio-english-version",
-    //     uri: "http://127.0.0.1:5500/database/build_database.html",
-    //     transform: function (body) {
-    //         return cheerio.load(body);
-    //     }
-    // };
-    
-        // const $ = await request(options);
-
-
-
-
-
-
-// request('http://127.0.0.1:5500/scrape.html', (error,
-// response, html) => {
-//     if (!error && response.statusCode == 200) {
-//         // console.log(html);
-//         const $ = cheerio.load(html);
-//         // const selection = $('.field-item');
-    
-//         // console.log(selection.html());
-     
-        
-//         // // console.log(selection.children().eq(1).text());
-//         // // selection.children().eq(1).remove();
-
-
-//         // console.log(selection.children().eq(1).text());
-
-
-
-//         $('strong').each((i, el) => {
-//             let questions = $(el).clone().children('a').remove().end().text();
-//             if (isNaN(questions[0]) === false) {
-//                 questions = questions.slice(0, -1);
-//                 questionlist.push(questions);
-//             }
-//         });
-
-//         // console.log(questionlist);
-
-//         $('ul').each((i, el) => {
-//             $(el).find('div').each((k, elem) => {
-//                 listitems.push($(elem).text().replace(/\s\s+/g, ''));
-//             })
-//             answerlist.push(listitems);
-//             listitems = [];       
-//         });
-//         // console.log(answerlist);
-            
-//     }
-// });
-

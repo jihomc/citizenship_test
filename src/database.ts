@@ -13,7 +13,7 @@ const pool = mysql2.createPool({
     host: process.env.MYSQL_HOSTNAME,
     multipleStatements: true,
     password: process.env.MYSQL_PASSWORD,
-    user: process.env.MYSQL_USERNAME,
+    user: process.env.MYSQL_USER,
 });
 
 export default pool;
