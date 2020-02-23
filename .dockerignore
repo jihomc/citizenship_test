@@ -1,8 +1,21 @@
-node_modules
-npm-debug.log
-Dockerfile
-.dockerignore
-.git
-README.md
-.gitignore
-.env
+#Dockerignore
+
+# Exclude everything
+*
+
+# Un-exclude Node and TypeScript packages
+!*.json
+
+# Un-exclude src and tools folder
+!src
+!tools
+
+# .env
+# node_modules
+
+#npm-debug.log
+#Dockerfile
+#.dockerignore
+#README.md
+#.gitignore
+#.git

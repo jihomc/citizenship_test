@@ -1,44 +1,65 @@
 version: '3'
 
 services:
-  nodejs:
+
+  db:
+    image: mysql:latest 
+    container_name: db
+    command: ["--sql_mode=STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION", "--default-authentication-plugin=mysql_native_password"]
+    restart: always
+    env_file: .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD} 
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    ports:
+      - "3306:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ./:/docker-entrypoint-initdb.d
+    networks:
+      - app-network
+
+  nodedb:
+    build:
+      context: ./database
+      dockerfile: Dockerfile
+    image: nodedb
+    container_name: nodedb
+    restart: on-failure
+    env_file: .env
+    environment:
+      WAIT_HOSTS: db:3306
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_HOSTNAME: db
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    networks:
+      - app-network
+
+  nodeapp:
     build:
       context: .
       dockerfile: Dockerfile
-    image: nodejs
-    container_name: nodejs
+    image: nodeapp
+    container_name: nodeapp
     restart: unless-stopped
     env_file: .env
     environment:
-      - MYSQL_USERNAME=$MYSQL_USERNAME
-      - MYSQL_PASSWORD=$MYSQL_PASSWORD
-      - MYSQL_HOSTNAME=db
-      - MYSQL_PORT=$MYSQL_PORT
-      - MYSQL_DATABASE=$MYSQL_DATABASE
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_HOSTNAME: db
+      MYSQL_PORT: ${MYSQL_PORT}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
     ports:
-      - "80:8080"
+      - "8080:8080"
     volumes:
-      - .:/home/node/app
+      - ./src:/home/node/app/src
       - node_modules:/home/node/app/node_modules
     networks:
-      - app-network
-    command: ./wait-for.sh db:3606 -- ./database/build_database.js
-
-  db:
-    image: mysql:8.0.12
-    container_name: db
-    restart: unless-stopped
-    env_file: .env
-    environment:
-      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
-      - MYSQL_USERNAME=$MYSQL_USERNAME
-      - MYSQL_PASSWORD=$MYSQL_PASSWORD
-      - MYSQL_DATABASE=$MYSQL_DATABASE
-    command: --default-authentication-plugin=mysql_native_password
-    volumes:  
-      - dbdata:/var/lib/mysql
-    networks:
-      - app-network  
+     - app-network
+    command: npm run dev:start
 
 networks:
   app-network:
@@ -46,4 +67,4 @@ networks:
 
 volumes:
   dbdata:
-  node_modules: 
+  node_modules:
