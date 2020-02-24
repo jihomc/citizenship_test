@@ -55,16 +55,18 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./src:/home/node/app/src
+      - ./src/:/home/node/app/src
       - node_modules:/home/node/app/node_modules
+        #- src:/home/node/app/src
     networks:
      - app-network
-    command: npm run dev:start
+    command: npm run dev
 
 networks:
   app-network:
     driver: bridge
 
 volumes:
+  src:
   dbdata:
   node_modules:
