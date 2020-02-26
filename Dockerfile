@@ -1,6 +1,6 @@
 FROM node:10-alpine
 
-ARG NODE_ENV=development
+ARG NODE_ENV
 
 ENV NODE_ENV=${NODE_ENV}
 
@@ -24,5 +24,4 @@ COPY --chown=node:node . .
 
 EXPOSE 8080
 
-CMD ["sh", "-cx", "/wait && node build_database.js && node get_testupdates.js && node get_geo.js && node get_reps.js"]
-
+CMD npm run start

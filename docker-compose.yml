@@ -1,4 +1,4 @@
-version: '3'
+version: "3.5"
 
 services:
 
@@ -9,7 +9,7 @@ services:
     restart: always
     env_file: .env
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD} 
+      MYSQL_RANDOM_ROOT_PASSWORD: 1 
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
@@ -37,6 +37,7 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
     networks:
       - app-network
+    command: sh -cx "/wait && node build_database.js && node get_testupdates.js && node get_geo.js && node get_reps.js" 
 
   nodeapp:
     build:
@@ -47,20 +48,19 @@ services:
     restart: unless-stopped
     env_file: .env
     environment:
+      NODE_ENV: ${NODE_ENV}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_HOSTNAME: db
-      MYSQL_PORT: ${MYSQL_PORT}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
     ports:
       - "8080:8080"
     volumes:
       - ./src/:/home/node/app/src
       - node_modules:/home/node/app/node_modules
-        #- src:/home/node/app/src
     networks:
      - app-network
-    command: npm run dev
+    command: npm run build start
 
 networks:
   app-network:
