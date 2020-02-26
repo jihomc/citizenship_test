@@ -37,7 +37,6 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
     networks:
       - app-network
-    command: sh -cx "/wait && node build_database.js && node get_testupdates.js && node get_geo.js && node get_reps.js" 
 
   nodeapp:
     build:
